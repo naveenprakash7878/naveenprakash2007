@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Create a Comic • ComicCraft{% endblock %}
+{% block content %}
+<section class="hero">
+    <p class="eyebrow">CREATE YOUR STORY</p>
+    <h1>Turn one idea into a five-panel comic.</h1>
+    <p class="hero-copy">
+        Describe your story, choose a character, setting, tone and art style.
+        ComicCraft builds the outline, narration, illustrations and PDF.
+    </p>
+</section>
+
+{% if error %}
+<div class="alert error">{{ error }}</div>
+{% endif %}
+
+<form class="card form-card" method="post" action="/generate">
+    <label>
+        Story Prompt
+        <textarea name="story_prompt" rows="5" required maxlength="2000"
+            placeholder="A brave fox discovers a hidden doorway in an enchanted forest...">{{ form.story_prompt if form else "" }}</textarea>
+    </label>
+
+    <div class="grid two">
+        <label>
+            Main Character Name
+            <input name="character_name" required maxlength="80"
+                value="{{ form.character_name if form else '' }}" placeholder="Arin">
+        </label>
+
+        <label>
+            Setting
+            <input name="setting" required maxlength="120"
+                value="{{ form.setting if form else '' }}" placeholder="Enchanted forest">
+        </label>
+    </div>
+
+    <div class="grid two">
+        <label>
+            Story Tone
+            <select name="tone">
+                {% for value in ["light-hearted", "dramatic", "poetic", "funny"] %}
+                <option value="{{ value }}" {% if form and form.tone == value %}selected{% endif %}>
+                    {{ value|title }}
+                </option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <label>
+            Art Style
+            <select name="art_style">
+                {% for value in ["anime", "pixel art", "comic book", "realistic"] %}
+                <option value="{{ value }}" {% if form and form.art_style == value %}selected{% endif %}>
+                    {{ value|title }}
+                </option>
+                {% endfor %}
+            </select>
+        </label>
+    </div>
+
+    <button class="button primary" type="submit">Generate My Comic</button>
+    <p class="hint">Generation can take several minutes when creating five AI images.</p>
+</form>
+{% endblock %}
